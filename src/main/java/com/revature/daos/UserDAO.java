@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface UserDAO {
     public List<User> findAll();
-
     public User findUser(String username);
+    public boolean addUser(User user);
 }

@@ -6,18 +6,28 @@ public class MenuController {
 
     private static Scanner scan = new Scanner(System.in);
     private static AddressController addressController = new AddressController();
+    private static UserController userController = new UserController();
 
     public void welcomeMenu() {
-        System.out.println("Welcome to Based American National Bank. Choose an option!");
-        System.out.println("1) Add an address \n"
+        System.out.println("Welcome to Based American National Bank.");
+        System.out.println("1) Login \n"
+                + "2) Register \n"
                 + "0) Exit");
         String choice = scan.nextLine();
 
         while (!choice.equals("0")) {
             switch (choice) {
                 case "1":
-                    addressController.addAddress();
-                    System.out.println("1) Add an address \n"
+                    System.out.println("This ain't workin' yet.");
+                    System.out.println("1) Login \n"
+                            + "2) Register \n"
+                            + "0) Exit");
+                    choice = scan.nextLine();
+                    break;
+                case "2":
+                    userController.addUser();
+                    System.out.println("1) Login \n"
+                            + "2) Register \n"
                             + "0) Exit");
                     choice = scan.nextLine();
                     break;

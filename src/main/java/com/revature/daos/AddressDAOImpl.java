@@ -31,9 +31,31 @@ public class AddressDAOImpl implements AddressDAO {
     }
 
     @Override
-    public Address findAddress(int id) {
+    public Address findByAddress(Address address) {
+        try (Connection conn = ConnectionUtil.getConnection()) {
+            String sql = "SELECT address_id FROM addresses WHERE address_street = ? AND address_city = ? AND address_state = ? AND address_zip = ?;";
+            int count = 0;
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(++count, address.getStreet());
+            statement.setString(++count, address.getCity());
+            statement.setString(++count, address.getState());
+            statement.setString(++count, address.getZip());
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                Address newAddress = new Address();
+                newAddress.setId(result.getInt("address_id"));
+                newAddress.setStreet(address.getStreet());
+                newAddress.setCity(address.getCity());
+                newAddress.setState(address.getState());
+                newAddress.setZip(address.getZip());
+                return newAddress;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
+
 
     @Override
     public boolean addAddress(Address address) {

@@ -8,6 +8,10 @@ public class AddressService {
 
     private AddressDAO addressDAO = new AddressDAOImpl();
 
+    public Address findByAddress(Address address) {
+        return addressDAO.findByAddress(address);
+    }
+
     public boolean newAddress(Address address) {
         return addressDAO.addAddress(address);
     }
