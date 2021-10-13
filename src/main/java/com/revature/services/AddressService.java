@@ -12,6 +12,10 @@ public class AddressService {
         return addressDAO.findByAddress(address);
     }
 
+    public Address findById(int id) {
+        return addressDAO.findById(id);
+    }
+
     public boolean newAddress(Address address) {
         return addressDAO.addAddress(address);
     }

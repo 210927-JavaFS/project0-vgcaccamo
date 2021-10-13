@@ -44,4 +44,13 @@ public class UserController {
             System.out.println("Something went wrong. Try again later.");
         }
     }
+
+    public void displayInfo(User user) {
+        Address address = addressService.findById(user.getAddressID());
+        System.out.println("Personal details for " + user.getUsername() + ":");
+        System.out.println(user.getFullName());
+        System.out.println(address.getStreet());
+        System.out.println(address.getCity() + ", " + address.getState() + "  " + address.getZip());
+        System.out.println(user.getPhoneNumber());
+    }
 }

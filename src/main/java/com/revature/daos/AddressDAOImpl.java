@@ -56,6 +56,28 @@ public class AddressDAOImpl implements AddressDAO {
         return null;
     }
 
+    @Override
+    public Address findById(int id) {
+        try (Connection conn = ConnectionUtil.getConnection()) {
+            String sql = "SELECT * FROM addresses WHERE address_id = ?;";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                Address address = new Address();
+                address.setId(result.getInt("address_id"));
+                address.setStreet(result.getString("address_street"));
+                address.setCity(result.getString("address_city"));
+                address.setState(result.getString("address_state"));
+                address.setZip(result.getString("address_zip"));
+                return address;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     @Override
     public boolean addAddress(Address address) {

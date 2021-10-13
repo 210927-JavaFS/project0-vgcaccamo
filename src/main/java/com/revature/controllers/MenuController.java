@@ -1,6 +1,6 @@
 package com.revature.controllers;
 
-import com.revature.models.Login;
+import com.revature.models.User;
 
 import java.util.Scanner;
 
@@ -10,7 +10,7 @@ public class MenuController {
     private static UserController userController = new UserController();
     private static LoginController loginController = new LoginController();
     private static AccountController accountController = new AccountController();
-    public static Login login = new Login();
+    public static User login = new User();
 
     public void menuAccess() {
         while (login.getAccessLevel() != -1) {
@@ -64,11 +64,12 @@ public class MenuController {
                     choice = "-1";
                     break;
                 case "2":
+                    accountController.addAccount(login.getUsername());
+                    choice = "-1";
                     break;
                 case "9":
-                    break;
+                    userController.displayInfo(login);
                 default:
-                    System.out.println("Welcome " + login.getUsername());
                     System.out.println("1) View your accounts \n"
                             + "2) Apply for a new account \n"
                             + "9) Your info \n"
@@ -77,7 +78,6 @@ public class MenuController {
                     break;
             }
         }
-        login.setUsername(null);
-        login.setAccessLevel(0);
+        login = new User();
     }
 }

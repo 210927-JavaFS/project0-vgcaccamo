@@ -1,7 +1,5 @@
 package com.revature.daos;
 
-import com.revature.models.Address;
-import com.revature.models.Login;
 import com.revature.models.User;
 import com.revature.services.AddressService;
 import com.revature.utils.ConnectionUtil;
@@ -30,7 +28,7 @@ public class UserDAOImpl implements UserDAO {
             ResultSet result = statement.executeQuery();
             if (result.next()) {
                 User user = new User();
-                user.setUsername(username);
+                user.setUsername(result.getString("username"));
                 user.setFullName(result.getString("full_name"));
                 user.setAddressID(result.getInt("address_id"));
                 user.setPhoneNumber(result.getString("phone_number"));
@@ -64,18 +62,22 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public Login loginUser(String username, String password) {
+    public User loginUser(String username, String password) {
         try (Connection conn = ConnectionUtil.getConnection()) {
-            String sql = "SELECT access_level FROM users WHERE username = ? AND user_pass = ?;";
+            String sql = "SELECT * FROM users WHERE username = ? AND user_pass = ?;";
             int count = 0;
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(++count, username);
             statement.setString(++count, password);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
-                Login login = new Login();
-                login.setUsername(username);
+                User login = new User();
+                login.setUsername(result.getString("username"));
+                login.setFullName(result.getString("full_name"));
+                login.setAddressID(result.getInt("address_id"));
+                login.setPhoneNumber(result.getString("phone_number"));
                 login.setAccessLevel(result.getInt("access_level"));
+                login.setPassword(result.getString("user_pass"));
                 return login;
             }
         } catch (SQLException e) {
