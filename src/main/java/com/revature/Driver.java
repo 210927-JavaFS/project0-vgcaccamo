@@ -7,6 +7,6 @@ public class Driver {
     private static MenuController menuController = new MenuController();
 
     public static void main(String[] args) {
-        menuController.welcomeMenu();
+        menuController.menuAccess();
     }
 }
