@@ -9,6 +9,7 @@ public class MenuController {
     private static Scanner scan = new Scanner(System.in);
     private static UserController userController = new UserController();
     private static LoginController loginController = new LoginController();
+    private static AccountController accountController = new AccountController();
     public static Login login = new Login();
 
     public void menuAccess() {
@@ -59,6 +60,8 @@ public class MenuController {
         while (!choice.equals("0")) {
             switch (choice) {
                 case "1":
+                    accountController.getAccounts(login.getUsername());
+                    choice = "-1";
                     break;
                 case "2":
                     break;

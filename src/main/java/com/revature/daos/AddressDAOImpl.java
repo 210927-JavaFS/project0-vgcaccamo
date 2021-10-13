@@ -15,7 +15,6 @@ public class AddressDAOImpl implements AddressDAO {
             Statement statement = conn.createStatement();
             ResultSet result = statement.executeQuery(sql);
             List<Address> list = new ArrayList<>();
-
             while (result.next()) {
                 Address address = new Address();
                 address.setStreet(result.getString("address_street"));
@@ -24,6 +23,7 @@ public class AddressDAOImpl implements AddressDAO {
                 address.setZip(result.getString("address_zip"));
                 list.add(address);
             }
+            return list;
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -6,7 +6,6 @@ import com.revature.models.Login;
 import com.revature.models.User;
 
 public class UserService {
-
     UserDAO userDAO = new UserDAOImpl();
 
     public boolean newUser(User user) {
@@ -15,5 +14,9 @@ public class UserService {
 
     public Login loginUser(String username, String password) {
         return userDAO.loginUser(username, password);
+    }
+
+    public User findByUsername(String username) {
+        return userDAO.findUser(username);
     }
 }

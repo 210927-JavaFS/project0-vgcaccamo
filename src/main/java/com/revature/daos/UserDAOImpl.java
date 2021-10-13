@@ -24,7 +24,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User findUser(String username) {
         try (Connection conn = ConnectionUtil.getConnection()) {
-            String sql = "SELECT * FROM users WHERE username = ?);";
+            String sql = "SELECT * FROM users WHERE username = ?;";
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, username);
             ResultSet result = statement.executeQuery();
@@ -35,7 +35,7 @@ public class UserDAOImpl implements UserDAO {
                 user.setAddressID(result.getInt("address_id"));
                 user.setPhoneNumber(result.getString("phone_number"));
                 user.setAccessLevel(result.getInt("access_level"));
-                user.setPassword(result.getString("password"));
+                user.setPassword(result.getString("user_pass"));
                 return user;
             }
         } catch (SQLException e) {
