@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class MenuController {
 
     private static Scanner scan = new Scanner(System.in);
-    private static AddressController addressController = new AddressController();
     private static UserController userController = new UserController();
 
     public void welcomeMenu() {

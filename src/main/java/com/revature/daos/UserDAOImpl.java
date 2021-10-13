@@ -4,8 +4,9 @@ import com.revature.models.User;
 import com.revature.services.AddressService;
 import com.revature.utils.ConnectionUtil;
 
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
