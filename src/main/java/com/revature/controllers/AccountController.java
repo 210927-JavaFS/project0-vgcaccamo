@@ -24,15 +24,26 @@ public class AccountController {
             System.out.println("Your accounts:");
             List<Integer> accountsList = new ArrayList<>();
             for (Account a : list) {
+                boolean approved = a.isApproval();
                 accountsList.add(a.getAccountID());
-                System.out.println(a.getAccountType() + " account no. " + a.getAccountID() + ": $" + a.getBalance());
+                if (approved) {
+                    System.out.println(a.getAccountID() + ") $" + a.getBalance() + " (" + a.getAccountType() + ")");
+                } else {
+                    System.out.println(a.getAccountID() + ") Pending Approval (" + a.getAccountType() + ")");
+                }
             }
             System.out.println("Enter account number for options, or 0 to go back.");
             String choice = scan.nextLine();
             while (!choice.equals("0")) {
                 if (accountsList.contains(Integer.parseInt(choice))) {
-                    accountOptions(Integer.parseInt(choice), accountsList);
-                    choice = "0";
+                    if (accountService.findByID(Integer.parseInt(choice)).isApproval()) {
+                        accountOptions(Integer.parseInt(choice), accountsList);
+                        choice = "0";
+                    } else {
+                        System.out.println("That account is still pending. \n"
+                                + "Enter account number for options, or 0 to go back.");
+                        choice = scan.nextLine();
+                    }
                 } else {
                     System.out.println("Try again. \n"
                             + "Enter account number for options, or 0 to go back.");
@@ -40,11 +51,12 @@ public class AccountController {
                 }
             }
         }
+
     }
 
     public void accountOptions(int id, List<Integer> accountsList) {
         Account account = accountService.findByID(id);
-        System.out.println(account.getAccountType() + " account no. " + account.getAccountID() + ": $" + account.getBalance());
+        System.out.println(account.getAccountID() + ") $" + account.getBalance() + " (" + account.getAccountType() + ")");
         System.out.println("What would you like to do? \n"
                 + "1) Withdraw \n"
                 + "2) Deposit \n"
@@ -67,17 +79,24 @@ public class AccountController {
                     choice = "0";
                     break;
                 case "3":
-                    if (accountsList.size() != 1) {
+                    List<Integer> approvedAccounts = new ArrayList<>();
+                    for (int i : accountsList) {
+                        if (accountService.findByID(i).isApproval()) {
+                            approvedAccounts.add(i);
+                        }
+                        ;
+                    }
+                    if (approvedAccounts.size() != 1) {
                         System.out.println("Enter target account number from the following:");
-                        for (int id2 : accountsList) {
+                        for (int id2 : approvedAccounts) {
                             if (id2 != id) {
                                 Account account2 = accountService.findByID(id2);
-                                System.out.println(account2.getAccountType() + " account no. " + account2.getAccountID() + ": $" + account2.getBalance());
+                                System.out.println(account2.getAccountID() + ") $" + account2.getBalance() + " (" + account2.getAccountType() + ")");
                             }
                         }
                         String choice2 = scan.nextLine();
                         while (!choice2.equals("0")) {
-                            if (accountsList.contains(Integer.parseInt(choice2))) {
+                            if (approvedAccounts.contains(Integer.parseInt(choice2))) {
                                 System.out.println("Transfer amount:");
                                 String transfer = scan.nextLine();
                                 accountService.withdraw(id, Double.parseDouble(transfer));
