@@ -15,4 +15,8 @@ public interface AccountDAO {
     public boolean withdraw(int id, double amount);
 
     public boolean deposit(int id, double amount);
+
+    public boolean approveAccount(Account account);
+
+    public boolean deleteAccount(Account account);
 }

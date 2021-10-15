@@ -30,4 +30,12 @@ public class AccountService {
     public boolean deposit(int id, double amount) {
         return accountDAO.deposit(id, amount);
     }
+
+    public boolean approveAccount(Account account) {
+        return accountDAO.approveAccount(account);
+    }
+
+    public boolean denyAccount(Account account) {
+        return accountDAO.deleteAccount(account);
+    }
 }
