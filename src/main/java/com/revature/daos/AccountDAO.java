@@ -12,9 +12,9 @@ public interface AccountDAO {
 
     public boolean addAccount(Account account);
 
-    public boolean withdraw(int id, double amount);
+    public Double withdraw(int id, double amount);
 
-    public boolean deposit(int id, double amount);
+    public Double deposit(int id, double amount);
 
     public boolean approveAccount(Account account);
 

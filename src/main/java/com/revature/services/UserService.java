@@ -4,6 +4,8 @@ import com.revature.daos.UserDAO;
 import com.revature.daos.UserDAOImpl;
 import com.revature.models.User;
 
+import java.util.List;
+
 public class UserService {
     UserDAO userDAO = new UserDAOImpl();
 
@@ -17,5 +19,9 @@ public class UserService {
 
     public User findByUsername(String username) {
         return userDAO.findUser(username);
+    }
+
+    public List<User> getAllUsers() {
+        return userDAO.findAll();
     }
 }

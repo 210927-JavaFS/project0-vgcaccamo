@@ -34,63 +34,86 @@ public class AccountController {
                         System.out.println(a.getAccountID() + ") Pending Approval (" + a.getAccountType() + ")");
                     }
                 }
-                System.out.println("Enter account number for options, or 0 to go back.");
-                String choice = scan.nextLine();
-                while (!choice.equals("0")) {
-                    if (accountsList.contains(Integer.parseInt(choice))) {
-                        Account accountChoice = accountService.findByID(Integer.parseInt(choice));
-                        if (accountChoice.isApproval()) {
-                            accountOptions(Integer.parseInt(choice), accountsList);
-                            choice = "0";
-                        } else if (accessLevel > 1 && !accountChoice.isApproval()) {
-                            System.out.println("Approve account? Y/N");
-                            switch (scan.nextLine().toLowerCase()) {
-                                case "y":
-                                    accountService.approveAccount(accountChoice);
-                                    System.out.println("Account approved!");
-                                    choice = "0";
-                                    break;
-                                case "n":
-                                    accountService.denyAccount(accountChoice);
-                                    System.out.println("Approval denied.");
-                                    choice = "0";
-                                    break;
-                                default:
-                                    System.out.println("Didn't catch that.");
-                                    break;
-                            }
-                        } else {
-                            System.out.println("That account is still pending. \n"
-                                    + "Enter account number for options, or 0 to go back.");
-                            choice = scan.nextLine();
-                        }
-                    } else {
-                        System.out.println("Try again. \n"
-                                + "Enter account number for options, or 0 to go back.");
-                        choice = scan.nextLine();
-                    }
-                }
+                chooseAccount(accountsList, accessLevel);
             }
         } else {
             System.out.println("Access denied.");
         }
     }
 
+    public void getAllAccounts(int accessLevel) {
+        List<User> userList = userService.getAllUsers();
+        List<Integer> accountIDList = new ArrayList<>();
+        for (User user : userList) {
+            System.out.println(user.getFullName() + ":");
+            List<Account> accountList = accountService.findByUser(user);
+            for (Account a : accountList) {
+                boolean approved = a.isApproval();
+                accountIDList.add(a.getAccountID());
+                if (approved) {
+                    System.out.println(a.getAccountID() + ") $" + a.getBalance() + " (" + a.getAccountType() + ")");
+                } else {
+                    System.out.println(a.getAccountID() + ") Pending Approval (" + a.getAccountType() + ")");
+                }
+            }
+            System.out.println("---");
+        }
+        chooseAccount(accountIDList, accessLevel);
+    }
+
+    public void chooseAccount(List<Integer> accountsList, int accessLevel) {
+        System.out.println("Enter account number for options, or 0 to go back.");
+        String choice = scan.nextLine();
+        while (!choice.equals("0")) {
+            if (accountsList.contains(Integer.parseInt(choice))) {
+                Account accountChoice = accountService.findByID(Integer.parseInt(choice));
+                if (accountChoice.isApproval()) {
+                    accountOptions(Integer.parseInt(choice), accountsList);
+                    choice = "0";
+                } else if (accessLevel > 1 && !accountChoice.isApproval()) {
+                    System.out.println("Approve account? Y/N");
+                    switch (scan.nextLine().toLowerCase()) {
+                        case "y":
+                            accountService.approveAccount(accountChoice);
+                            System.out.println("Account approved!");
+                            choice = "0";
+                            break;
+                        case "n":
+                            accountService.denyAccount(accountChoice);
+                            System.out.println("Approval denied.");
+                            choice = "0";
+                            break;
+                        default:
+                            System.out.println("Didn't catch that.");
+                            break;
+                    }
+                } else {
+                    System.out.println("That account is still pending. \n"
+                            + "Enter account number for options, or 0 to go back.");
+                    choice = scan.nextLine();
+                }
+            } else {
+                System.out.println("Try again. \n"
+                        + "Enter account number for options, or 0 to go back.");
+                choice = scan.nextLine();
+            }
+        }
+    }
+
     public void accountOptions(int id, List<Integer> accountsList) {
         Account account = accountService.findByID(id);
         String choice = "";
+        Double balance = account.getBalance();
         while (!choice.equals("0")) {
             switch (choice) {
                 case "1":
                     System.out.println("Withdrawal amount:");
-                    accountService.withdraw(id, Double.parseDouble(scan.nextLine()));
-                    System.out.println("Withdraw successful!");
+                    balance = accountService.withdraw(id, Double.parseDouble(scan.nextLine()));
                     choice = "";
                     break;
                 case "2":
                     System.out.println("Deposit amount:");
-                    accountService.deposit(id, Double.parseDouble(scan.nextLine()));
-                    System.out.println("Deposit successful!");
+                    balance = accountService.deposit(id, Double.parseDouble(scan.nextLine()));
                     choice = "";
                     break;
                 case "3":
@@ -113,9 +136,8 @@ public class AccountController {
                             if (approvedAccounts.contains(Integer.parseInt(choice2))) {
                                 System.out.println("Transfer amount:");
                                 String transfer = scan.nextLine();
-                                accountService.withdraw(id, Double.parseDouble(transfer));
+                                balance = accountService.withdraw(id, Double.parseDouble(transfer));
                                 accountService.deposit(Integer.parseInt(choice2), Double.parseDouble(transfer));
-                                System.out.println("Transfer successful!");
                                 choice2 = "0";
                             } else {
                                 System.out.println("That account is not available or does not exist.");
@@ -129,7 +151,7 @@ public class AccountController {
                     choice = "";
                     break;
                 default:
-                    System.out.println(account.getAccountID() + ") $" + account.getBalance() + " (" + account.getAccountType() + ")");
+                    System.out.println(account.getAccountID() + ") $" + balance + " (" + account.getAccountType() + ")");
                     System.out.println("What would you like to do? \n"
                             + "1) Withdraw \n"
                             + "2) Deposit \n"

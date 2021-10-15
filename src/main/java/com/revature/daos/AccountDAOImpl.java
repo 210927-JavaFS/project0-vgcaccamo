@@ -75,7 +75,7 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public boolean withdraw(int id, double amount) {
+    public Double withdraw(int id, double amount) {
         try (Connection conn = ConnectionUtil.getConnection()) {
             String sql = "UPDATE accounts SET balance = (balance - ?) WHERE account_id = ?;";
             int count = 0;
@@ -83,15 +83,22 @@ public class AccountDAOImpl implements AccountDAO {
             statement.setDouble(++count, amount);
             statement.setInt(++count, id);
             statement.execute();
-            return true;
+            String sql2 = "SELECT balance FROM accounts WHERE account_id = ?;";
+            PreparedStatement statement2 = conn.prepareStatement(sql2);
+            statement2.setInt(1, id);
+            statement2.execute();
+            ResultSet result = statement2.executeQuery();
+            while (result.next()) {
+                return result.getDouble("balance");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     @Override
-    public boolean deposit(int id, double amount) {
+    public Double deposit(int id, double amount) {
         try (Connection conn = ConnectionUtil.getConnection()) {
             String sql = "UPDATE accounts SET balance = (balance + ?) WHERE account_id = ?;";
             int count = 0;
@@ -99,11 +106,18 @@ public class AccountDAOImpl implements AccountDAO {
             statement.setDouble(++count, amount);
             statement.setInt(++count, id);
             statement.execute();
-            return true;
+            String sql2 = "SELECT balance FROM accounts WHERE account_id = ?;";
+            PreparedStatement statement2 = conn.prepareStatement(sql2);
+            statement2.setInt(1, id);
+            statement2.execute();
+            ResultSet result = statement2.executeQuery();
+            while (result.next()) {
+                return result.getDouble("balance");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
@@ -16,6 +17,25 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List<User> findAll() {
+        try (Connection conn = ConnectionUtil.getConnection()) {
+            String sql = "SELECT * FROM users;";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            ResultSet result = statement.executeQuery();
+            List<User> list = new ArrayList<>();
+            if (result.next()) {
+                User user = new User();
+                user.setUsername(result.getString("username"));
+                user.setFullName(result.getString("full_name"));
+                user.setAddressID(result.getInt("address_id"));
+                user.setPhoneNumber(result.getString("phone_number"));
+                user.setAccessLevel(result.getInt("access_level"));
+                user.setPassword(result.getString("user_pass"));
+                list.add(user);
+            }
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

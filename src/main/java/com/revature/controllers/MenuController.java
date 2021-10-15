@@ -124,6 +124,40 @@ public class MenuController {
     }
 
     public void adminMenu() {
-
+        String choice = "";
+        while (!choice.equals("0")) {
+            String username;
+            switch (choice) {
+                case "1":
+                    System.out.println("Enter your client's username:");
+                    username = scan.nextLine();
+                    accountController.getAccounts(username, login);
+                    choice = "";
+                    break;
+                case "2":
+                    System.out.println("Enter your client's username:");
+                    username = scan.nextLine();
+                    userController.displayInfo(userController.userService.findByUsername(username));
+                    System.out.println("---");
+                    choice = "";
+                    break;
+                case "3":
+                    accountController.getAllAccounts(login.getAccessLevel());
+                    choice = "";
+                    break;
+                case "9":
+                    userController.displayInfo(login);
+                    System.out.println("---");
+                default:
+                    System.out.println("1) View client accounts \n"
+                            + "2) View client info \n"
+                            + "3) View all accounts \n"
+                            + "9) Your info \n"
+                            + "0) Logout");
+                    choice = scan.nextLine();
+                    break;
+            }
+        }
+        login = new User();
     }
 }

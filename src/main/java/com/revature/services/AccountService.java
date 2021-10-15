@@ -23,11 +23,11 @@ public class AccountService {
         return accountDAO.addAccount(account);
     }
 
-    public boolean withdraw(int id, double amount) {
+    public Double withdraw(int id, double amount) {
         return accountDAO.withdraw(id, amount);
     }
 
-    public boolean deposit(int id, double amount) {
+    public Double deposit(int id, double amount) {
         return accountDAO.deposit(id, amount);
     }
 
