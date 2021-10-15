@@ -74,13 +74,15 @@ public class AccountController {
                     System.out.println("Approve account? Y/N");
                     switch (scan.nextLine().toLowerCase()) {
                         case "y":
-                            accountService.approveAccount(accountChoice);
+                            if (accountService.approveAccount(accountChoice)) {
                             System.out.println("Account approved!");
-                            choice = "0";
-                            break;
+                        }
+                        choice = "0";
+                        break;
                         case "n":
-                            accountService.denyAccount(accountChoice);
-                            System.out.println("Account denied.");
+                            if (accountService.denyAccount(accountChoice)) {
+                                System.out.println("Account denied.");
+                            }
                             choice = "0";
                             break;
                         default:
@@ -156,8 +158,9 @@ public class AccountController {
                         String choice2 = scan.nextLine().toLowerCase();
                         switch (choice2) {
                             case "y":
-                                accountService.denyAccount(account);
-                                System.out.println("Account cancelled.");
+                                if (accountService.denyAccount(account)) {
+                                    System.out.println("Account cancelled.");
+                                }
                                 break;
                             case "n":
                                 System.out.println("Account will not be cancelled at this time.");

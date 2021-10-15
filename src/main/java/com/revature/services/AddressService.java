@@ -6,7 +6,7 @@ import com.revature.models.Address;
 
 public class AddressService {
 
-    private AddressDAO addressDAO = new AddressDAOImpl();
+    private final AddressDAO addressDAO = new AddressDAOImpl();
 
     public Address findByAddress(Address address) {
         return addressDAO.findByAddress(address);

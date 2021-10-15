@@ -6,17 +6,17 @@ import com.revature.models.User;
 import java.util.List;
 
 public interface AccountDAO {
-    public Account findByID(int id);
+    Account findByID(int id);
 
-    public List<Account> findByUser(User user);
+    List<Account> findByUser(User user);
 
-    public boolean addAccount(Account account);
+    boolean addAccount(Account account);
 
-    public Double withdraw(int id, double amount);
+    Double withdraw(int id, double amount);
 
-    public Double deposit(int id, double amount);
+    Double deposit(int id, double amount);
 
-    public boolean approveAccount(Account account);
+    boolean approveAccount(Account account);
 
-    public boolean deleteAccount(Account account);
+    boolean deleteAccount(Account account);
 }

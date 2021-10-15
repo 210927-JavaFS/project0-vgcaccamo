@@ -1,7 +1,6 @@
 package com.revature.daos;
 
 import com.revature.models.User;
-import com.revature.services.AddressService;
 import com.revature.utils.ConnectionUtil;
 
 import java.sql.Connection;
@@ -12,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
-
-    private AddressService addressService = new AddressService();
 
     @Override
     public List<User> findAll() {
