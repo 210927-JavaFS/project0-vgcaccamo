@@ -68,7 +68,7 @@ public class AccountController {
             if (accountsList.contains(Integer.parseInt(choice))) {
                 Account accountChoice = accountService.findByID(Integer.parseInt(choice));
                 if (accountChoice.isApproval()) {
-                    accountOptions(Integer.parseInt(choice), accountsList);
+                    accountOptions(Integer.parseInt(choice), accountsList, accessLevel);
                     choice = "0";
                 } else if (accessLevel > 1 && !accountChoice.isApproval()) {
                     System.out.println("Approve account? Y/N");
@@ -80,7 +80,7 @@ public class AccountController {
                             break;
                         case "n":
                             accountService.denyAccount(accountChoice);
-                            System.out.println("Approval denied.");
+                            System.out.println("Account denied.");
                             choice = "0";
                             break;
                         default:
@@ -100,7 +100,7 @@ public class AccountController {
         }
     }
 
-    public void accountOptions(int id, List<Integer> accountsList) {
+    public void accountOptions(int id, List<Integer> accountsList, int accessLevel) {
         Account account = accountService.findByID(id);
         String choice = "";
         Double balance = account.getBalance();
@@ -150,13 +150,46 @@ public class AccountController {
                     }
                     choice = "";
                     break;
+                case "9":
+                    if (accessLevel == 3) {
+                        System.out.println("Cancel this account? Y/N");
+                        String choice2 = scan.nextLine().toLowerCase();
+                        switch (choice2) {
+                            case "y":
+                                accountService.denyAccount(account);
+                                System.out.println("Account cancelled.");
+                                break;
+                            case "n":
+                                System.out.println("Account will not be cancelled at this time.");
+                                break;
+                            default:
+                                System.out.println("Didn't catch that.");
+                                break;
+                        }
+                        if (choice2.equals("y")) {
+                            choice = "0";
+                        } else {
+                            choice = "";
+                        }
+                        break;
+                    }
                 default:
+                    //add option to cancel account for admins only
                     System.out.println(account.getAccountID() + ") $" + balance + " (" + account.getAccountType() + ")");
-                    System.out.println("What would you like to do? \n"
-                            + "1) Withdraw \n"
-                            + "2) Deposit \n"
-                            + "3) Transfer to another account \n"
-                            + "0) Cancel");
+                    if (accessLevel == 3) {
+                        System.out.println("What would you like to do? \n"
+                                + "1) Withdraw \n"
+                                + "2) Deposit \n"
+                                + "3) Transfer to another account \n"
+                                + "9) Cancel account \n"
+                                + "0) Go back");
+                    } else {
+                        System.out.println("What would you like to do? \n"
+                                + "1) Withdraw \n"
+                                + "2) Deposit \n"
+                                + "3) Transfer to another account \n"
+                                + "0) Go back");
+                    }
                     choice = scan.nextLine();
             }
         }
@@ -166,7 +199,7 @@ public class AccountController {
         System.out.println("What kind of account would you like to open? \n"
                 + "1) Checking \n"
                 + "2) Savings \n"
-                + "0) Cancel");
+                + "0) Go back");
         String choice = scan.nextLine();
         Account account = new Account();
         account.setUserID(username);
@@ -185,7 +218,7 @@ public class AccountController {
                     System.out.println("What kind of account would you like to open? \n"
                             + "1) Checking \n"
                             + "2) Savings \n"
-                            + "0) Cancel");
+                            + "0) Go back");
                     choice = scan.nextLine();
                     break;
             }
