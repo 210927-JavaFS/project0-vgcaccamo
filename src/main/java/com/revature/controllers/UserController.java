@@ -9,9 +9,9 @@ import java.util.Scanner;
 
 public class UserController {
 
-    Scanner scan = new Scanner(System.in);
-    UserService userService = new UserService();
-    AddressService addressService = new AddressService();
+    private static final Scanner scan = new Scanner(System.in);
+    private static final UserService userService = new UserService();
+    private static final AddressService addressService = new AddressService();
 
     public void addUser() {
         System.out.println("Welcome to the user wizard. Enter your new username:");

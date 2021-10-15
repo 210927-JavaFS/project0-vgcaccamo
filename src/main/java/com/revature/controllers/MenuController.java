@@ -1,12 +1,14 @@
 package com.revature.controllers;
 
 import com.revature.models.User;
+import com.revature.services.UserService;
 
 import java.util.Scanner;
 
 public class MenuController {
 
     private static final Scanner scan = new Scanner(System.in);
+    private static final UserService userService = new UserService();
     private static final UserController userController = new UserController();
     private static final LoginController loginController = new LoginController();
     private static final AccountController accountController = new AccountController();
@@ -104,7 +106,7 @@ public class MenuController {
                 case "2":
                     System.out.println("Enter your client's username:");
                     username = scan.nextLine();
-                    userController.displayInfo(userController.userService.findByUsername(username));
+                    userController.displayInfo(userService.findByUsername(username));
                     System.out.println("---");
                     choice = "";
                     break;
@@ -137,7 +139,7 @@ public class MenuController {
                 case "2":
                     System.out.println("Enter your client's username:");
                     username = scan.nextLine();
-                    userController.displayInfo(userController.userService.findByUsername(username));
+                    userController.displayInfo(userService.findByUsername(username));
                     System.out.println("---");
                     choice = "";
                     break;

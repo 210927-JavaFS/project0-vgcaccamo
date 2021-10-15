@@ -11,9 +11,9 @@ import java.util.Scanner;
 
 public class AccountController {
 
-    UserService userService = new UserService();
-    AccountService accountService = new AccountService();
-    Scanner scan = new Scanner(System.in);
+    private static final UserService userService = new UserService();
+    private static final AccountService accountService = new AccountService();
+    private static final Scanner scan = new Scanner(System.in);
 
     public void getAccounts(String username, User login) {
         User user = userService.findByUsername(username);

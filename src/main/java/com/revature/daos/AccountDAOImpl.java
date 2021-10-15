@@ -19,15 +19,14 @@ public class AccountDAOImpl implements AccountDAO {
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setInt(1, id);
             ResultSet result = statement.executeQuery();
-            while (result.next()) {
-                Account account = new Account();
-                account.setAccountID(result.getInt("account_id"));
-                account.setUserID(result.getString("user_id"));
-                account.setAccountType(result.getString("account_type"));
-                account.setBalance(result.getDouble("balance"));
-                account.setApproval(result.getBoolean("approval"));
-                return account;
-            }
+            Account account = new Account();
+            result.next();
+            account.setAccountID(result.getInt("account_id"));
+            account.setUserID(result.getString("user_id"));
+            account.setAccountType(result.getString("account_type"));
+            account.setBalance(result.getDouble("balance"));
+            account.setApproval(result.getBoolean("approval"));
+            return account;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -88,9 +87,8 @@ public class AccountDAOImpl implements AccountDAO {
             statement2.setInt(1, id);
             statement2.execute();
             ResultSet result = statement2.executeQuery();
-            while (result.next()) {
-                return result.getDouble("balance");
-            }
+            result.next();
+            return result.getDouble("balance");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -111,9 +109,8 @@ public class AccountDAOImpl implements AccountDAO {
             statement2.setInt(1, id);
             statement2.execute();
             ResultSet result = statement2.executeQuery();
-            while (result.next()) {
-                return result.getDouble("balance");
-            }
+            result.next();
+            return result.getDouble("balance");
         } catch (SQLException e) {
             e.printStackTrace();
         }

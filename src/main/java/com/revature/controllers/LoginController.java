@@ -7,8 +7,8 @@ import java.util.Scanner;
 
 public class LoginController {
 
-    Scanner scan = new Scanner(System.in);
-    UserService userService = new UserService();
+    private static final Scanner scan = new Scanner(System.in);
+    private static final UserService userService = new UserService();
 
     public User loginUser() {
         System.out.println("Username:");

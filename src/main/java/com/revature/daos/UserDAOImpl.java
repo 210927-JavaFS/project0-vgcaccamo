@@ -2,6 +2,7 @@ package com.revature.daos;
 
 import com.revature.models.User;
 import com.revature.utils.ConnectionUtil;
+import com.revature.utils.PassEncrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,14 +20,13 @@ public class UserDAOImpl implements UserDAO {
             PreparedStatement statement = conn.prepareStatement(sql);
             ResultSet result = statement.executeQuery();
             List<User> list = new ArrayList<>();
-            if (result.next()) {
+            while (result.next()) {
                 User user = new User();
                 user.setUsername(result.getString("username"));
                 user.setFullName(result.getString("full_name"));
                 user.setAddressID(result.getInt("address_id"));
                 user.setPhoneNumber(result.getString("phone_number"));
                 user.setAccessLevel(result.getInt("access_level"));
-                user.setPassword(result.getString("user_pass"));
                 list.add(user);
             }
             return list;
@@ -50,7 +50,6 @@ public class UserDAOImpl implements UserDAO {
                 user.setAddressID(result.getInt("address_id"));
                 user.setPhoneNumber(result.getString("phone_number"));
                 user.setAccessLevel(result.getInt("access_level"));
-                user.setPassword(result.getString("user_pass"));
                 return user;
             }
         } catch (SQLException e) {
@@ -69,7 +68,7 @@ public class UserDAOImpl implements UserDAO {
             statement.setString(++count, user.getFullName());
             statement.setInt(++count, user.getAddressID());
             statement.setString(++count, user.getPhoneNumber());
-            statement.setString(++count, user.getPassword());
+            statement.setString(++count, PassEncrypt.getHash(user.getPassword().getBytes(), "SHA-512"));
             statement.execute();
             return true;
         } catch (SQLException e) {
@@ -85,7 +84,7 @@ public class UserDAOImpl implements UserDAO {
             int count = 0;
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(++count, username);
-            statement.setString(++count, password);
+            statement.setString(++count, PassEncrypt.getHash(password.getBytes(), "SHA-512"));
             ResultSet result = statement.executeQuery();
             if (result.next()) {
                 User login = new User();
@@ -94,7 +93,6 @@ public class UserDAOImpl implements UserDAO {
                 login.setAddressID(result.getInt("address_id"));
                 login.setPhoneNumber(result.getString("phone_number"));
                 login.setAccessLevel(result.getInt("access_level"));
-                login.setPassword(result.getString("user_pass"));
                 return login;
             }
         } catch (SQLException e) {
